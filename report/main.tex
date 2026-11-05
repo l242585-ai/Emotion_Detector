@@ -1,0 +1,300 @@
+\documentclass[12pt,a4paper]{article}
+
+% Packages
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{float}
+\usepackage{subcaption}
+
+% Code styling
+\lstset{
+    basicstyle=\ttfamily\small,
+    breaklines=true,
+    frame=single,
+    backgroundcolor=\color{gray!10}
+}
+
+% Title information
+\title{\textbf{Emotion Detection from Text}\\
+\large Deliverable 1: Problem Definition \& Data Foundations}
+
+\author{
+Member 1 Name \\
+Member 2 Name \\
+Member 3 Name \\
+\textit{Course Name - Section X}
+}
+
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+This report presents the foundation work for an emotion detection system that classifies text into six emotion categories (joy, sadness, anger, fear, love, surprise). We describe the problem statement, justify the need for machine learning, detail our data collection and cleaning methodology, present exploratory data analysis with visualizations, and outline our feature engineering strategy. The cleaned dataset of 20,000 samples is ready for model training in the next phase.
+\end{abstract}
+
+\tableofcontents
+\newpage
+
+%============================================
+% SECTION 1: Introduction (Member 1)
+%============================================
+\section{Introduction}
+
+\subsection{Problem Statement}
+% TODO: Member 1 - Describe the problem
+Understanding emotion in text is crucial for applications like customer support, content moderation, and mental wellness platforms. Unlike basic sentiment analysis (positive/negative), emotion detection requires identifying specific emotions (joy, sadness, anger, fear, love, surprise) which provides richer insights into user experience and mental states.
+
+\subsection{Target Audience}
+% TODO: Member 1 - Who will use this?
+This system targets:
+\begin{itemize}
+    \item Customer support teams analyzing feedback
+    \item Mental wellness app developers
+    \item Content moderation systems
+    \item Social media analytics platforms
+\end{itemize}
+
+\subsection{Why Machine Learning is Necessary}
+% TODO: Member 1 - Justify ML approach
+Traditional rule-based or keyword matching systems fail to handle:
+\begin{itemize}
+    \item \textbf{Negation}: "I'm not happy" expresses sadness, not joy
+    \item \textbf{Context}: "This is sick!" can express joy or disgust
+    \item \textbf{Sarcasm}: "Oh great, another Monday" expresses frustration
+    \item \textbf{Implicit emotion}: "I got the job!" implies joy without stating it
+\end{itemize}
+
+Machine learning models can learn these nuanced patterns from data. We will compare three approaches: TF-IDF + Logistic Regression (baseline), BiLSTM (captures sequence), and DistilBERT (transformer with contextual understanding).
+
+%============================================
+% SECTION 2: Dataset Description (Member 1)
+%============================================
+\section{Dataset Description}
+
+\subsection{Data Source}
+% TODO: Member 1 - Dataset details
+We use the \texttt{dair-ai/emotion} dataset from Hugging Face \cite{emotion_dataset}. This is a widely-used benchmark for emotion classification research.
+
+\subsection{Dataset Statistics}
+The dataset contains 20,000 English text samples distributed as:
+\begin{itemize}
+    \item \textbf{Training set}: 16,000 samples
+    \item \textbf{Validation set}: 2,000 samples
+    \item \textbf{Test set}: 2,000 samples
+\end{itemize}
+
+\subsection{Label Distribution}
+The six emotion classes are encoded as:
+\begin{table}[H]
+\centering
+\begin{tabular}{@{}cl@{}}
+\toprule
+\textbf{Label} & \textbf{Emotion} \\ \midrule
+0 & sadness \\
+1 & joy \\
+2 & love \\
+3 & anger \\
+4 & fear \\
+5 & surprise \\ \bottomrule
+\end{tabular}
+\caption{Emotion label encoding}
+\label{tab:labels}
+\end{table}
+
+\textbf{Note}: The dataset is class-imbalanced, with joy and sadness being most frequent. This motivates our use of class weights and macro-F1 as the evaluation metric.
+
+%============================================
+% SECTION 3: Data Cleaning (Member 2)
+%============================================
+\section{Data Cleaning Methodology}
+
+\subsection{Motivation}
+% TODO: Member 2 - Why cleaning is needed
+Raw text data often contains quality issues that can degrade model performance. We implemented a systematic cleaning pipeline to ensure data integrity.
+
+\subsection{Cleaning Steps}
+
+\subsubsection{Missing Value Detection}
+% TODO: Member 2 - Report findings
+We checked for missing values in both the text and label columns across all splits.
+
+\begin{lstlisting}[language=Python, caption={Missing value check}]
+missing = df.isnull().sum()
+\end{lstlisting}
+
+\textbf{Result}: [TODO: Add your findings - e.g., "No missing values found"]
+
+\subsubsection{Duplicate Removal}
+% TODO: Member 2 - Report findings
+Duplicate entries can lead to data leakage and inflate performance metrics.
+
+\begin{lstlisting}[language=Python, caption={Duplicate removal}]
+df = df.drop_duplicates(subset=['text'])
+\end{lstlisting}
+
+\textbf{Result}: [TODO: Add your findings - e.g., "Removed X duplicates from train set"]
+
+\subsubsection{Outlier Detection}
+% TODO: Member 2 - Explain IQR method
+We used the Interquartile Range (IQR) method to detect text length outliers:
+\begin{itemize}
+    \item Calculate Q1 (25th percentile) and Q3 (75th percentile)
+    \item IQR = Q3 - Q1
+    \item Remove samples with length < Q1 - 1.5×IQR or > Q3 + 1.5×IQR
+\end{itemize}
+
+\textbf{Result}: [TODO: Add statistics - e.g., "Removed Y outliers with extreme lengths"]
+
+\subsubsection{Train/Test Leakage Check}
+% TODO: Member 2 - Verify no overlap
+We verified that no text appears in multiple splits to prevent data leakage.
+
+\textbf{Result}: [TODO: Confirm no leakage found]
+
+\subsection{Cleaning Results Summary}
+\begin{table}[H]
+\centering
+\begin{tabular}{@{}lrr@{}}
+\toprule
+\textbf{Split} & \textbf{Before} & \textbf{After} \\ \midrule
+Train & 16,000 & [TODO] \\
+Validation & 2,000 & [TODO] \\
+Test & 2,000 & [TODO] \\ \bottomrule
+\end{tabular}
+\caption{Dataset size before and after cleaning}
+\label{tab:cleaning}
+\end{table}
+
+%============================================
+% SECTION 4: Exploratory Data Analysis (Member 3)
+%============================================
+\section{Exploratory Data Analysis}
+
+\subsection{Class Distribution}
+% TODO: Member 3 - Add figure and analysis
+Figure \ref{fig:class_dist} shows the distribution of emotions in the training set. 
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{../figures/class_distribution.png}
+\caption{Emotion class distribution in training set}
+\label{fig:class_dist}
+\end{figure}
+
+\textbf{Observation}: [TODO: Describe imbalance - which classes are most/least common?]
+
+\subsection{Text Length Distribution}
+% TODO: Member 3 - Add figure and analysis
+Figure \ref{fig:text_length} shows the distribution of text lengths across all samples.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{../figures/text_length_distribution.png}
+\caption{Text length distribution (word count)}
+\label{fig:text_length}
+\end{figure}
+
+\textbf{Observation}: [TODO: Describe - mean, median, range. Are texts mostly short?]
+
+\subsection{Word Clouds per Emotion}
+% TODO: Member 3 - Add word clouds (2x3 grid recommended)
+Figures \ref{fig:wordclouds} show the most frequent words for each emotion class.
+
+\begin{figure}[H]
+\centering
+% You can use subfigure for a grid layout
+\includegraphics[width=\textwidth]{../figures/wordclouds_all.png}
+\caption{Word clouds for each emotion class}
+\label{fig:wordclouds}
+\end{figure}
+
+\textbf{Observation}: [TODO: What distinctive words appear for each emotion?]
+
+\subsection{Top Words per Emotion}
+% TODO: Member 3 - Add bar chart or table
+[TODO: Show top 10-15 words for each emotion with frequencies]
+
+%============================================
+% SECTION 5: Feature Engineering (Member 3)
+%============================================
+\section{Feature Engineering}
+
+\subsection{Label Encoding}
+% TODO: Member 3 - Brief description
+Emotion labels (0-5) are already numerically encoded. We verified the encoding matches Table \ref{tab:labels}.
+
+\subsection{TF-IDF Vectorization}
+% TODO: Member 3 - Explain for baseline model
+For the Logistic Regression baseline, we use TF-IDF (Term Frequency-Inverse Document Frequency):
+
+\begin{lstlisting}[language=Python, caption={TF-IDF parameters}]
+TfidfVectorizer(max_features=5000, ngram_range=(1,2))
+\end{lstlisting}
+
+This captures word importance while down-weighting common words like "the" and "is".
+
+\subsection{Tokenization for Deep Learning}
+% TODO: Member 3 - Explain for BiLSTM
+For the BiLSTM model, we:
+\begin{enumerate}
+    \item Tokenize text into sequences of word IDs
+    \item Pad sequences to a fixed length (max 100 words)
+    \item Create an embedding layer (pre-trained or learned)
+\end{enumerate}
+
+\subsection{DistilBERT Tokenization}
+% TODO: Member 3 - Explain transformer tokenization
+For the DistilBERT model, we use the Hugging Face tokenizer:
+\begin{lstlisting}[language=Python]
+tokenizer = DistilBertTokenizer.from_pretrained('distilbert-base-uncased')
+\end{lstlisting}
+
+This uses WordPiece tokenization with special tokens [CLS] and [SEP].
+
+\subsection{Class Imbalance Handling}
+% TODO: Member 3 - Explain class weights
+To handle class imbalance, we compute class weights:
+\[
+w_i = \frac{n_{samples}}{n_{classes} \times n_{samples\_in\_class\_i}}
+\]
+
+These weights will be used during model training to penalize misclassification of rare classes more heavily.
+
+%============================================
+% SECTION 6: Next Steps
+%============================================
+\section{Next Steps}
+
+For Deliverable 2, we will:
+\begin{enumerate}
+    \item Train three models (Logistic Regression, BiLSTM, DistilBERT)
+    \item Compare performance using macro-F1, precision, recall
+    \item Analyze prediction errors and model biases
+    \item Implement explainability (word highlighting)
+    \item Deploy the best model as an API with Streamlit frontend
+\end{enumerate}
+
+%============================================
+% REFERENCES
+%============================================
+\bibliographystyle{plain}
+\begin{thebibliography}{9}
+
+\bibitem{emotion_dataset}
+Saravia, E., Liu, H.-C. T., Huang, Y.-H., Wu, J., \& Chen, Y.-S. (2018).
+\textit{CARER: Contextualized Affect Representations for Emotion Recognition}.
+In Proceedings of the 2018 Conference on Empirical Methods in Natural Language Processing.
+Available: \url{https://huggingface.co/datasets/dair-ai/emotion}
+
+\end{thebibliography}
+
+\end{document}
