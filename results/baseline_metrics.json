@@ -1,0 +1,25 @@
+{
+  "model": "TF-IDF + Logistic Regression",
+  "timestamp": "2026-11-06T01:34:40.597768",
+  "hyperparameters": {
+    "max_features": 5000,
+    "ngram_range": "(1, 2)",
+    "max_iter": 1000,
+    "class_weight": "balanced"
+  },
+  "validation": {
+    "accuracy": 0.906026557711951,
+    "f1_macro": 0.8816048729421538,
+    "f1_weighted": 0.9071838812110313
+  },
+  "test": {
+    "accuracy": 0.8963075366717248,
+    "f1_macro": 0.8597128880593101,
+    "f1_weighted": 0.899349417044105
+  },
+  "data": {
+    "train_samples": 15594,
+    "val_samples": 1958,
+    "test_samples": 1977
+  }
+}
