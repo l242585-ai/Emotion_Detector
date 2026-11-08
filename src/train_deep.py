@@ -211,7 +211,7 @@ def train_bilstm(
     optimizer = torch.optim.Adam(model.parameters(), lr=lr)
     # Learning rate scheduler — reduce LR on plateau
     scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
-        optimizer, mode='min', factor=0.5, patience=2, verbose=False
+        optimizer, mode='min', factor=0.5, patience=2
     )
 
     total_params = sum(p.numel() for p in model.parameters())
