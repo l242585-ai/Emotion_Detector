@@ -1,0 +1,21 @@
+{
+  "model": "BiLSTM",
+  "timestamp": "2026-11-09T08:19:55.366396",
+  "hyperparameters": {
+    "lr": 0.01,
+    "batch_size": 64,
+    "dropout": 0.2,
+    "hidden_dim": 64,
+    "num_layers": 2,
+    "embedding_dim": 128
+  },
+  "best_epoch": 2,
+  "best_val_loss": 0.2085193720075392,
+  "best_val_acc": 0.9172625127681308,
+  "test": {
+    "accuracy": 0.9109762266059687,
+    "f1_macro": 0.8724638035135426,
+    "f1_weighted": 0.9137910129321573,
+    "loss": 0.23201768316568866
+  }
+}
