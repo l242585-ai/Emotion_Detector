@@ -41,19 +41,71 @@ Raw and processed data are **not** stored in this repo (see `.gitignore`). They 
 
 ```
 Emotion_Detector/
-├── README.md
-├── .gitignore
-├── requirements.txt
-├── Data_Scripts/            # Phase 2 code
-│   ├── 01_download_data.py
-│   ├── 02_clean_data.py
-│   ├── 03_eda.py
-│   └── 04_features.py
-├── data/                    # created by the scripts (gitignored)
-│   ├── raw/
-│   └── processed/
-├── Figures/                 # EDA charts used in the report
-└── Reports/                 # LaTeX report (report.tex, report.pdf)
+├── README.md                    # Project overview and setup
+├── requirements.txt             # Python dependencies
+├── .gitignore                   # Git ignore rules
+│
+├── data/                        # Data files (gitignored)
+│   ├── raw/                     # Original downloaded datasets
+│   └── processed/               # Cleaned and processed data
+│
+├── src/                         # Source code
+│   ├── models/                  # Model definitions
+│   │   ├── baseline_model.py
+│   │   ├── deep_model.py
+│   │   └── distilbert_model.py
+│   ├── utils/                   # Utilities
+│   │   ├── data_loader.py
+│   │   ├── preprocessing.py
+│   │   └── metrics.py
+│   ├── train_baseline.py        # Training scripts
+│   ├── train_deep.py
+│   ├── train_distilbert.py
+│   ├── evaluate.py              # Evaluation scripts
+│   ├── evaluate_all.py
+│   ├── error_analysis.py
+│   ├── hyperparameter_tuning.py
+│   └── visualize_results.py
+│
+├── scripts/                     # Utility scripts
+│   ├── data_processing/         # Data pipeline scripts
+│   │   ├── 01_download_data.py
+│   │   ├── 02_clean_data.py
+│   │   ├── 03_eda.py
+│   │   └── 04_features.py
+│   ├── create_architecture_diagram.py
+│   ├── create_hyperparameter_viz.py
+│   ├── run_member2.py
+│   └── test_preprocessing.py
+│
+├── notebooks/                   # Jupyter notebooks
+│   └── Emotion_Detector_Training.ipynb
+│
+├── models/                      # Saved trained models
+│   ├── best_baseline.pkl
+│   ├── best_bilstm.pth
+│   └── best_model.pth
+│
+├── results/                     # Training and evaluation results
+│   ├── metrics, logs, predictions
+│   └── visualizations (confusion matrices, curves, etc.)
+│
+├── figures/                     # EDA and architecture diagrams
+│   ├── EDA charts
+│   └── Architecture diagrams
+│
+├── experiments/                 # Experiment tracking
+│   └── hyperparameter_log.csv
+│
+└── docs/                        # Documentation
+    ├── ARCHITECTURE.md
+    ├── COLAB_INSTRUCTIONS.md
+    ├── DELIVERABLE_2_TASKS.md
+    ├── TASK_DIVISION.md
+    ├── BASELINE_RESULTS.md
+    ├── HYPERPARAMETER_TUNING_SUMMARY.md
+    ├── report/                  # LaTeX report source
+    └── Reports/                 # Compiled reports (PDFs)
 ```
 
 ## Setup
@@ -71,10 +123,10 @@ pip install -r requirements.txt
 Run the scripts in order from the project root:
 
 ```bash
-python Data_Scripts/01_download_data.py   # download dataset from Hugging Face to data/raw/
-python Data_Scripts/02_clean_data.py      # missing values, duplicates, outliers, leakage check
-python Data_Scripts/03_eda.py             # EDA charts saved to Figures/
-python Data_Scripts/04_features.py        # TF-IDF, tokenization, label encoding, class weights
+python scripts/data_processing/01_download_data.py   # download dataset from Hugging Face to data/raw/
+python scripts/data_processing/02_clean_data.py      # missing values, duplicates, outliers, leakage check
+python scripts/data_processing/03_eda.py             # EDA charts saved to figures/
+python scripts/data_processing/04_features.py        # TF-IDF, tokenization, label encoding, class weights
 ```
 
 Each script depends on the output of the previous one (`04_features.py` needs the cleaned files created by `02_clean_data.py`). `03_eda.py` is only needed to regenerate the charts.
@@ -92,7 +144,7 @@ Each script depends on the output of the previous one (`04_features.py` needs th
 
 ## Report
 
-The Phase 1 and Phase 2 technical report (LaTeX) is in `Reports/`: `report.tex` and the compiled `report.pdf`.
+The Phase 1 and Phase 2 technical report (LaTeX) is in `docs/Reports/`: `AI_phase1.tex` and the compiled `AI_phase1.pdf`.
 
 ## Project Status
 
