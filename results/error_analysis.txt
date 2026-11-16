@@ -1,0 +1,55 @@
+=== Per-class Accuracy ===
+  sadness   : 0.722  (65/90)
+  joy       : 0.773  (58/75)
+  love      : 0.649  (50/77)
+  anger     : 0.732  (71/97)
+  fear      : 0.707  (53/75)
+  surprise  : 0.709  (61/86)
+
+=== Error Rate by Class ===
+  love      : 27 errors out of 77 (35.1%)
+  anger     : 26 errors out of 97 (26.8%)
+  sadness   : 25 errors out of 90 (27.8%)
+  surprise  : 25 errors out of 86 (29.1%)
+  fear      : 22 errors out of 75 (29.3%)
+  joy       : 17 errors out of 75 (22.7%)
+
+=== Top Confusion Pairs ===
+  anger      -> surprise  : 10 times
+  surprise   -> fear      : 10 times
+  love       -> joy       : 8 times
+  surprise   -> sadness   : 7 times
+  love       -> sadness   : 7 times
+  anger      -> sadness   : 6 times
+  sadness    -> joy       : 6 times
+  sadness    -> love      : 6 times
+  joy        -> surprise  : 5 times
+  love       -> anger     : 5 times
+
+=== Accuracy by Text Length ===
+  1-5     : 0.680
+  6-10    : 0.667
+  11-20   : 0.736
+  21-30   : 0.752
+  31+     : 0.686
+
+=== Sample Misclassified Examples (10) ===
+  True: love       | Pred: joy        | Text: i feel ugly i cover myself with a beautiful blanket in a make believe gown
+  True: anger      | Pred: love       | Text: i feel a bit stressed even though all the things i have going on are fun
+  True: surprise   | Pred: sadness    | Text: i am not surprised cause its like ok when you feel crappy and it just continues 
+  True: surprise   | Pred: anger      | Text: i have better things to do than to feel humiliated
+  True: anger      | Pred: sadness    | Text: i feel privileged to be a part of something so eternal and so precious to the lo
+  True: anger      | Pred: sadness    | Text: im feeling very peaceful about our wedding again now after having
+  True: surprise   | Pred: joy        | Text: ive been feeling from my adoring fans that would be teh whole like of you who ar
+  True: love       | Pred: joy        | Text: i just don t like to be asked about the reason behind my mood when i m feeling g
+  True: anger      | Pred: sadness    | Text: i feel really bothered about the lack of time i get to find inspiration
+  True: anger      | Pred: surprise   | Text: i feel a little stunned but can t imagine what the folks who were working in the
+
+=== Bias Check: Class Size vs F1 ===
+  Emotion        Count   Accuracy
+  sadness           90      0.722
+  joy               75      0.773
+  love              77      0.649
+  anger             97      0.732
+  fear              75      0.707
+  surprise          86      0.709
