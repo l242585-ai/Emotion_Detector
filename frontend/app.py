@@ -98,14 +98,28 @@ if predict_btn:
     if not text.strip():
         st.warning("Please enter some text first.")
     else:
-        endpoint = "/predict/explain" if show_highlights else "/predict"
         with st.spinner("Analysing..."):
             try:
-                r = requests.post(
-                    f"{BACKEND_URL}{endpoint}",
-                    json={"text": text, "model": model_choice},
-                    timeout=15,
-                )
+                # Try explain endpoint first, fall back to plain predict
+                if show_highlights:
+                    r = requests.post(
+                        f"{BACKEND_URL}/predict/explain",
+                        json={"text": text, "model": model_choice},
+                        timeout=15,
+                    )
+                    if r.status_code != 200:
+                        # Fall back to plain predict
+                        r = requests.post(
+                            f"{BACKEND_URL}/predict",
+                            json={"text": text, "model": model_choice},
+                            timeout=15,
+                        )
+                else:
+                    r = requests.post(
+                        f"{BACKEND_URL}/predict",
+                        json={"text": text, "model": model_choice},
+                        timeout=15,
+                    )
                 r.raise_for_status()
                 result = r.json()
             except requests.exceptions.ConnectionError:
