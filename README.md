@@ -120,6 +120,18 @@ python src/visualize_results.py                      # generate result plots
 
 ---
 
+## Model Weights (Phase 3 & 4)
+
+Trained model weights are stored in the `models/` directory:
+
+- **Baseline Model**: `models/best_baseline.pkl` (0.41 MB) - TF-IDF + Logistic Regression
+- **BiLSTM Model**: `models/best_bilstm.pth` (16.95 MB) - Bidirectional LSTM
+- **DistilBERT Model**: `models/best_model.pth` (16.95 MB) - Fine-tuned DistilBERT
+
+All model files are under 100MB and included in this repository.
+
+---
+
 ## Deliverable 3 — Running the Application
 
 ### 1 · Start the backend API
