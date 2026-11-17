@@ -41,9 +41,8 @@ class BaselineModel:
         
         # Logistic Regression Classifier
         self.classifier = LogisticRegression(
-            class_weight='balanced',  # Handle class imbalance
+            class_weight='balanced',
             max_iter=max_iter,
-            multi_class='multinomial',  # For 6-class classification
             solver='lbfgs',
             random_state=42
         )
