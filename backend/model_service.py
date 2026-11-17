@@ -29,7 +29,7 @@ EMOTION_EMOJIS = {
 
 # HuggingFace repo where DistilBERT weights are stored
 # Format: "username/repo-name"
-HF_DISTILBERT_REPO = "l242585-ai/emotion-distilbert"
+HF_DISTILBERT_REPO = "666Anoushay-Fatima/emotion-distilbert"
 
 
 class ModelService:
