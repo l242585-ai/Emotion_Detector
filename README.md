@@ -142,6 +142,16 @@ Each script depends on the output of the previous one (`04_features.py` needs th
   - DistilBERT tokenizer (`distilbert-base-uncased`, max length 128, padding and truncation) for the deep models
   - Balanced class weights to handle imbalance
 
+## Model Weights (Phase 3 & 4)
+
+Trained model weights are stored in the `models/` directory:
+
+- **Baseline Model**: `models/best_baseline.pkl` (0.41 MB) - TF-IDF + Logistic Regression
+- **BiLSTM Model**: `models/best_bilstm.pth` (16.95 MB) - Bidirectional LSTM
+- **DistilBERT Model**: `models/best_model.pth` (16.95 MB) - Fine-tuned DistilBERT
+
+All model files are under 100MB and included in this repository.
+
 ## Report
 
 The Phase 1 and Phase 2 technical report (LaTeX) is in `docs/Reports/`: `AI_phase1.tex` and the compiled `AI_phase1.pdf`.
